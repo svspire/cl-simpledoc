@@ -240,16 +240,17 @@
 
 (defun print-package-docs (package stream &key (external t) (internal nil) (functions nil) (macros nil) (generic-functions nil) (classes nil) (variables nil))
   "Do a mass conversion of documentation from a package into HTML."
+  (setf package (find-package package))
   (let ((external-symbols nil)
         (internal-symbols (when internal (loop for sym being each present-symbol of package
-                                 collect sym)))
+                                           when (eql package (symbol-package sym)) ; omit imported symbols
+                                           collect sym)))
         (found-functions nil)
         (found-gfs nil)
         (found-macros nil)
         (function nil)
         (found-classes nil)
         (found-variables nil))
-    
     ; Gotta get both here because class names are always external
     (do-external-symbols (sym package)
       (unless (find-symbol (symbol-name sym) :COMMON-LISP) ; because UIOP reexports these things and COMMON-LISP is adequately documented elsewhere
