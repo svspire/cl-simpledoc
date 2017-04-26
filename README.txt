@@ -1,6 +1,7 @@
 SVSDOC is a quick-and-dirty documentation system for Common Lisp.
 Converts Common Lisp documentation strings to HTML.
 Minimal dependencies: Just closer-mop.
+Tested only in CCL.
 It's very simple: It only generates HTML output, and it sends all the
 documentation for a package to a single HTML page. It's much simpler
 than most of the other documentation systems for Common Lisp but that
@@ -13,7 +14,8 @@ EXAMPLE
 OTHER DOCUMENTATION SYSTEMS FOR COMMON LISP
 (ql:quickload "atdoc")
 www.lichteblau.com/atdoc/doc/
-Not recommended. Loads, but doesn't run, in CCL because it's
+Not recommended for CCL. Appears to be designed for SBCL.
+Loads, but doesn't run, in CCL because it's
 not conditionalized for CCL, and depends on a WHOLE BUNCH
 of other stuff. Very hard to call. See the example of calling it in 
 gendocs.lisp, in the trivial-garbage system. cl-geonames also uses
@@ -25,3 +27,5 @@ Generates HTML output, simple, easy to call. Has to be modified
 to make it work in CCL. This is easy to do, but it doesn't seem
 to have a public Git or other repo so I can't do a pull request for
 my changes.
+UPDATE: It seems to be on github now.
+https://github.com/kiuma/CL-API
