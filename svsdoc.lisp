@@ -35,7 +35,7 @@
 ;;; Extracts Common Lisp documentation strings from symbols in a package and generates html output
 ;;;   similar to CLtL2 format.
 
-;;; Note: I've attempted to make this portable, but the function #'arglist is nonstandard and only available in CCL.
+;;; Note: I've attempted to make this portable, but it's only been tested in CCL.
 
 (in-package :svsdoc)
 
@@ -63,9 +63,7 @@
           (write-string entity stream)
           (if (> (char-code char) 126)
               (let ((*print-base* 10))
-                (write-string "&#" stream) 
-                (format stream "~D" (char-code char))
-                (write-char #\; stream))
+                (format stream "&#~D;" (char-code char)))
               (write-char char stream))))))
 
 (defun htmlify-format (stream format-arg colon? at? &rest rest)
@@ -243,7 +241,8 @@
 (defun print-package-docs (package stream &key (external t) (internal nil) (functions nil) (macros nil) (generic-functions nil) (classes nil) (variables nil))
   "Do a mass conversion of documentation from a package into HTML."
   (let ((external-symbols nil)
-        (internal-symbols nil)
+        (internal-symbols (when internal (loop for sym being each present-symbol of package
+                                 collect sym)))
         (found-functions nil)
         (found-gfs nil)
         (found-macros nil)
@@ -255,9 +254,7 @@
     (do-external-symbols (sym package)
       (unless (find-symbol (symbol-name sym) :COMMON-LISP) ; because UIOP reexports these things and COMMON-LISP is adequately documented elsewhere
       (setq external-symbols (cons sym external-symbols))))
-    (setq internal-symbols (loop for x being each present-symbol of package
-                                 collect x))
-    
+
     (flet ((lookup-symbol (symbol)
              (when (and (or functions generic-functions macros)
                         (fboundp symbol))
