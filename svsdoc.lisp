@@ -73,7 +73,7 @@
   (htmlify (format nil "~:A" format-arg) stream))
 
 (defgeneric thing-to-html (thing stream)
-  (:documentation "Print thing as to stream HTML."))
+  (:documentation "Print thing to stream as HTML."))
 
 (defmethod thing-to-html :around (thing stream)
   "Ensure that thing-to-html does not return anything."

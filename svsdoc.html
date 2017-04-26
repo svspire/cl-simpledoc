@@ -1,0 +1,531 @@
+<h2>Documentation for package :SVSDOC</h2><i>This documentation was created by svsdoc</i><p>
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>*entity-table* </font></code></B>
+<TD ALIGN=RIGHT><I>[Variable]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>document-package </font></B>(&amp;rest rest)</code></TD>
+<TD ALIGN=RIGHT><I>[Macro]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>eql-specializer </font></B>(specializer)</code></TD>
+<TD ALIGN=RIGHT><I>[Class]</I></TD></TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
+<TABLE CELLPADDING=3 WIDTH=95%>
+<TR>
+<TD>direct-methods</TD><TD ALIGN=LEFT></TD>
+</TR>
+<TR>
+<TD>object</TD><TD ALIGN=LEFT></TD>
+</TR></TABLE></TD></TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>slot-definition </font></B>(metaobject)</code></TD>
+<TD ALIGN=RIGHT><I>[Class]</I></TD></TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
+<TABLE CELLPADDING=3 WIDTH=95%>
+<TR>
+<TD>name</TD><TD ALIGN=LEFT></TD>
+</TR>
+<TR>
+<TD>type</TD><TD ALIGN=LEFT></TD>
+</TR>
+<TR>
+<TD>initfunction</TD><TD ALIGN=LEFT></TD>
+</TR>
+<TR>
+<TD>initform</TD><TD ALIGN=LEFT></TD>
+</TR>
+<TR>
+<TD>initargs</TD><TD ALIGN=LEFT></TD>
+</TR>
+<TR>
+<TD>allocation</TD><TD ALIGN=LEFT></TD>
+</TR>
+<TR>
+<TD>documentation</TD><TD ALIGN=LEFT></TD>
+</TR>
+<TR>
+<TD>class</TD><TD ALIGN=LEFT></TD>
+</TR></TABLE></TD></TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>standard-accessor-method </font></B>(standard-method)</code></TD>
+<TD ALIGN=RIGHT><I>[Class]</I></TD></TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
+<TABLE CELLPADDING=3 WIDTH=95%>
+<TR>
+<TD>qualifiers</TD><TD ALIGN=LEFT></TD>
+</TR>
+<TR>
+<TD>specializers</TD><TD ALIGN=LEFT></TD>
+</TR>
+<TR>
+<TD>function</TD><TD ALIGN=LEFT></TD>
+</TR>
+<TR>
+<TD>generic-function</TD><TD ALIGN=LEFT></TD>
+</TR>
+<TR>
+<TD>name</TD><TD ALIGN=LEFT></TD>
+</TR>
+<TR>
+<TD>lambda-list</TD><TD ALIGN=LEFT></TD>
+</TR>
+<TR>
+<TD>slot-definition</TD><TD ALIGN=LEFT></TD>
+</TR></TABLE></TD></TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>%thing-to-html </font></B>(thing stream &amp;optional (width 100%))</code></TD>
+<TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Shows the description of a function or macro or variable or class.</TD>
+</TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>convert-specializer-pair </font></B>(list stream)</code></TD>
+<TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Make and format a specific specializer pair in the lambda list of a method.</TD>
+</TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>fn-arglist </font></B>(fname)</code></TD>
+<TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Returns arglist for function named fname</TD>
+</TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>fn-name </font></B>(f)</code></TD>
+<TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>form-specialized-arglist </font></B>(specializers arglist)</code></TD>
+<TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Make and format the specialized lambda list for a method.</TD>
+</TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>htmlify </font></B>(string stream)</code></TD>
+<TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Replace forbidden characters in string with HTML entities.</TD>
+</TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>htmlify-format </font></B>(stream format-arg colon? at? &amp;rest rest)</code></TD>
+<TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>print-docs </font></B>(docs stream)</code></TD>
+<TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>print-package-docs </font></B>(package stream &amp;key (external t) (internal nil) (functions nil) (macros nil) (generic-functions nil) (classes nil) (variables nil))</code></TD>
+<TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Do a mass conversion of documentation from a package into HTML.</TD>
+</TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>print-package-docs </font></B>(package stream &amp;key (external t) (internal nil) (functions nil) (macros nil) (generic-functions nil) (classes nil) (variables nil))</code></TD>
+<TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Do a mass conversion of documentation from a package into HTML.</TD>
+</TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>class-direct-superclasses </font></B>(class)</code></TD>
+<TD ALIGN=RIGHT><I>[Generic function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>class-direct-superclasses </B>((arg-0 class))</code></TD>
+<TD ALIGN=RIGHT><I>[accessor-method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>class-slots </font></B>(class)</code></TD>
+<TD ALIGN=RIGHT><I>[Generic function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>class-slots </B>((arg-0 class))</code></TD>
+<TD ALIGN=RIGHT><I>[accessor-method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>eql-specializer-object </font></B>(eql-specializer)</code></TD>
+<TD ALIGN=RIGHT><I>[Generic function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>eql-specializer-object </B>((arg-0 eql-specializer))</code></TD>
+<TD ALIGN=RIGHT><I>[accessor-method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>generic-function-methods </font></B>(generic-function)</code></TD>
+<TD ALIGN=RIGHT><I>[Generic function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>generic-function-methods </B>((arg-0 generic-function))</code></TD>
+<TD ALIGN=RIGHT><I>[accessor-method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>generic-function-name </font></B>(funcallable-standard-object)</code></TD>
+<TD ALIGN=RIGHT><I>[Generic function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>generic-function-name </B>((arg-0 funcallable-standard-object))</code></TD>
+<TD ALIGN=RIGHT><I>[accessor-method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>method-generic-function </font></B>(standard-method)</code></TD>
+<TD ALIGN=RIGHT><I>[Generic function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>method-generic-function </B>((arg-0 standard-method))</code></TD>
+<TD ALIGN=RIGHT><I>[accessor-method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>method-specializers </font></B>(standard-method)</code></TD>
+<TD ALIGN=RIGHT><I>[Generic function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>method-specializers </B>((arg-0 standard-method))</code></TD>
+<TD ALIGN=RIGHT><I>[accessor-method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>print-documentation-section </font></B>(thing stream)</code></TD>
+<TD ALIGN=RIGHT><I>[Generic function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Prints the documentation section for thing.</TD>
+</TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>print-documentation-section </B>((&amp;method slot-definition) next-method-context slot stream)</code></TD>
+<TD ALIGN=RIGHT><I>[method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR>
+</TABLE>
+
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>print-documentation-section </B>((&amp;method function) next-method-context fn stream)</code></TD>
+<TD ALIGN=RIGHT><I>[method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Makes documentation section for a function or macro.</TD>
+</TR>
+</TABLE>
+
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>print-documentation-section </B>((&amp;method symbol) next-method-context sym stream)</code></TD>
+<TD ALIGN=RIGHT><I>[method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Makes documentation section for a variable.</TD>
+</TR>
+</TABLE>
+
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>print-documentation-section </B>(&amp;method next-method-context thing stream)</code></TD>
+<TD ALIGN=RIGHT><I>[method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Makes default documentation section.</TD>
+</TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>print-topline </font></B>(thing stream)</code></TD>
+<TD ALIGN=RIGHT><I>[Generic function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Makes the top line of the description of thing in HTML format.</TD>
+</TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>print-topline </B>((&amp;method standard-class) next-method-context class stream)</code></TD>
+<TD ALIGN=RIGHT><I>[method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Makes the top line for a class.</TD>
+</TR>
+</TABLE>
+
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>print-topline </B>((&amp;method function) next-method-context fn stream)</code></TD>
+<TD ALIGN=RIGHT><I>[method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Makes the top line for a function or macro.</TD>
+</TR>
+</TABLE>
+
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>print-topline </B>((&amp;method generic-function) next-method-context gf stream)</code></TD>
+<TD ALIGN=RIGHT><I>[method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Makes the top line for a generic function.</TD>
+</TR>
+</TABLE>
+
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>print-topline </B>((&amp;method standard-method) next-method-context sm stream)</code></TD>
+<TD ALIGN=RIGHT><I>[method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Makes the top line for a method.</TD>
+</TR>
+</TABLE>
+
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>print-topline </B>((&amp;method symbol) next-method-context sym stream)</code></TD>
+<TD ALIGN=RIGHT><I>[method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Makes the top line for a variable.</TD>
+</TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>slot-definition-allocation </font></B>(slot-definition)</code></TD>
+<TD ALIGN=RIGHT><I>[Generic function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>slot-definition-allocation </B>((arg-0 slot-definition))</code></TD>
+<TD ALIGN=RIGHT><I>[accessor-method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>slot-definition-name </font></B>(slot-definition)</code></TD>
+<TD ALIGN=RIGHT><I>[Generic function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>slot-definition-name </B>((arg-0 slot-definition))</code></TD>
+<TD ALIGN=RIGHT><I>[accessor-method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>thing-to-html </font></B>(thing stream)</code></TD>
+<TD ALIGN=RIGHT><I>[Generic function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Print thing to stream as HTML.</TD>
+</TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>thing-to-html </B>((&amp;method standard-class) next-method-context class stream)</code></TD>
+<TD ALIGN=RIGHT><I>[method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Shows the description of a class.</TD>
+</TR>
+</TABLE>
+
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>thing-to-html </B>((&amp;method function) next-method-context fn stream)</code></TD>
+<TD ALIGN=RIGHT><I>[method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Shows the description of a function or macro.</TD>
+</TR>
+</TABLE>
+
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>thing-to-html </B>((&amp;method standard-method) next-method-context sm stream)</code></TD>
+<TD ALIGN=RIGHT><I>[method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Shows the description of a method.</TD>
+</TR>
+</TABLE>
+
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>thing-to-html </B>((&amp;method generic-function) next-method-context gf stream)</code></TD>
+<TD ALIGN=RIGHT><I>[method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Shows the description of a generic function.</TD>
+</TR>
+</TABLE>
+
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>thing-to-html </B>((&amp;method symbol) next-method-context sym stream)</code></TD>
+<TD ALIGN=RIGHT><I>[method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>[No documentation found]</TD>
+</TR>
+</TABLE>
+
+<TABLE CELLPADDING=3 WIDTH="95%">
+<TR>
+<TD ALIGN=LEFT><B><CODE>thing-to-html </B>:around (&amp;method next-method-context thing stream)</code></TD>
+<TD ALIGN=RIGHT><I>[method]</I></TD></TR>
+<TR>
+<TD COLSPAN=2>Ensure that thing-to-html does not return anything.</TD>
+</TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+<BR/>
