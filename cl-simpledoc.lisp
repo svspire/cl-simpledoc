@@ -184,6 +184,7 @@
   (:documentation "Prints the documentation section for thing."))
 
 (defun print-docs (docs stream)
+  "Send docs to stream as a table cell."
   (let ((doc (or docs "[No documentation found]")))
     (format stream "~%<TR>")
     (when doc (format stream "~%<TD COLSPAN=2>~/cl-simpledoc::htmlify-format/</TD>" doc))
@@ -254,23 +255,59 @@
     ; Gotta get both here because class names are always external
     (do-external-symbols (sym package)
       (unless (find-symbol (symbol-name sym) :COMMON-LISP) ; because UIOP reexports these things and COMMON-LISP is adequately documented elsewhere
-      (setq external-symbols (cons sym external-symbols))))
-
+        (setq external-symbols (cons sym external-symbols))))
+    
+    ; remove duplicates. Internals should be strictly internals.
+    (when internal
+      (setf internal-symbols (set-difference internal-symbols external-symbols)))
+    
     (flet ((lookup-symbol (symbol)
              (when (and (or functions generic-functions macros)
                         (fboundp symbol))
                (setq function (symbol-function symbol))
                (if (macro-function symbol)
-                 (setq found-macros (cons symbol found-macros))
-                 (typecase function
-                   (generic-function (setq found-gfs (cons symbol found-gfs)))
-                   (function (setq found-functions (cons symbol found-functions))))))
+                   (setq found-macros (cons symbol found-macros))
+                   (typecase function
+                     (generic-function (setq found-gfs (cons symbol found-gfs)))
+                     (function (setq found-functions (cons symbol found-functions))))))
              (when (and classes
                         (find-class symbol nil))
                (setq found-classes (cons symbol found-classes)))
              (when (and variables
                         (boundp symbol))
-               (setq found-variables (cons symbol found-variables)))))
+               (setq found-variables (cons symbol found-variables))))
+           
+           (showdocs (onlist)
+             (when variables
+               (dolist (f found-variables)
+                 (when (member f onlist)
+                   (thing-to-html f stream)
+                   (format stream "<BR/>~%")
+                   )))
+             (when macros
+               (dolist (f found-macros)
+                 (when (member f onlist)
+                   (thing-to-html (macro-function f) stream)
+                   (format stream "<BR/>~%")
+                   )))
+             (when classes
+               (dolist (c found-classes)
+                 (when (member c onlist)
+                   (thing-to-html (find-class c) stream)
+                   (format stream "<BR/>~%")
+                   )))
+             (when functions
+               (dolist (f found-functions)
+                 (when (member f onlist)
+                   (thing-to-html (symbol-function f) stream)
+                   (format stream "<BR/>~%")
+                   )))
+             (when generic-functions
+               (dolist (gf found-gfs)
+                 (when (member gf onlist)
+                   (thing-to-html (symbol-function gf) stream)
+                   (format stream "<BR/>~%")
+                   )))))
       
       (when external
         (dolist (symbol external-symbols)
@@ -285,37 +322,20 @@
       (setf found-classes (sort found-classes #'string-lessp))
       (setf found-macros (sort found-macros #'string-lessp))
       (setf found-variables (sort found-variables #'string-lessp))
-       ; (format t "~%Functions: ~S" found-functions)
-       ; (format t "~%Generic functions: ~S" found-gfs)
-       ; (format t "~%Classes: ~S" found-classes)
-      (format stream "<h2>Documentation for package :~A</h2>" (package-name package))
-      (format stream "<i>This documentation was created by cl-simpledoc</i>")
-      (format stream "<p>")
-      (when variables
-        (dolist (f found-variables)
-          (thing-to-html f stream)
-          (format stream "<BR/>~%")
-          ))
-      (when macros
-        (dolist (f found-macros)
-          (thing-to-html (macro-function f) stream)
-          (format stream "<BR/>~%")
-          ))
-      (when classes
-        (dolist (c found-classes)
-          (thing-to-html (find-class c) stream)
-          (format stream "<BR/>~%")
-          ))
-      (when functions
-        (dolist (f found-functions)
-          (thing-to-html (symbol-function f) stream)
-          (format stream "<BR/>~%")
-          ))
-      (when generic-functions
-        (dolist (gf found-gfs)
-          (thing-to-html (symbol-function gf) stream)
-          (format stream "<BR/>~%")
-          )))))
+      ; (format t "~%Functions: ~S" found-functions)
+      ; (format t "~%Generic functions: ~S" found-gfs)
+      ; (format t "~%Classes: ~S" found-classes)
+      (format stream "<h2>Documentation for package :~A</h2>~%" (package-name package))
+      (format stream "<i>This documentation was created by <a href=https://github.com/svspire/cl-simpledoc>cl-simpledoc</a></i>~%")
+      (format stream "<p>~%")
+      
+      (when external
+        (format stream "<h3 style=\"color:green;\">External Symbols</h3>~%")
+        (showdocs external-symbols))
+      (when internal
+        (format stream "<hr>~%")
+        (format stream "<h3 style=\"color:red;\">Internal Symbols</h3>~%")
+        (showdocs internal-symbols)))))
            
 #|
 (with-open-file (s "ccl:cl-simpledoc.html" :direction :output :if-exists :supersede)
