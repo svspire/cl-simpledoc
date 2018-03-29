@@ -9,6 +9,8 @@ documentation for a package to a single HTML page. It's much simpler
 than most of the other documentation systems for Common Lisp but that
 also makes it easier to maintain and easier to port.
 
+Since any Common Lisp automatic documentation system should be able to document itself, we've done that with [cl-simpledoc.html](http://htmlpreview.github.com/?https://github.com/svspire/cl-simpledoc/edit/master/cl-simpledoc.html) , which is included in this repository for your convenience.
+
 ## Example
 
 ```lisp
