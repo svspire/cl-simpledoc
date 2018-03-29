@@ -1,4 +1,4 @@
-;;; svsdoc.lisp
+;;; cl-simpledoc.lisp
 ;;; 07-Mar-2017 SVS
 
 ;; Copyright (c) 2017, Shannon Spires
@@ -37,7 +37,7 @@
 
 ;;; Note: I've attempted to make this portable, but it's only been tested in CCL.
 
-(in-package :svsdoc)
+(in-package :cl-simpledoc)
 
 (defparameter *entity-table*
   '((#\< . "&lt;")
@@ -134,7 +134,7 @@
   (let ((*print-case* :downcase)
         (thingname (if (constantp sym) "[Constant]" "[Variable]")))
     (format stream "~%<TR>")
-    (format stream "~%<TD ALIGN=LEFT><B><code><font size=+1>~/svsdoc::htmlify-format/ </font></code></B>" sym)
+    (format stream "~%<TD ALIGN=LEFT><B><code><font size=+1>~/cl-simpledoc::htmlify-format/ </font></code></B>" sym)
     (format stream "~%<TD ALIGN=RIGHT><I>~A</I></TD></TR>" thingname)
     (when (constantp sym)
       (format stream "~%<TR><TD><i>Value: </i>~S</TD></TR>" (symbol-value sym)))))
@@ -145,8 +145,8 @@
         (qualifiers (method-qualifiers sm))
         (specializers (method-specializers sm)))
     (format stream "~%<TR>")
-    (format stream "~%<TD ALIGN=LEFT><B><CODE>~/svsdoc::htmlify-format/ </B>" (generic-function-name (method-generic-function sm)))
-    (format stream "~{~S ~}~/svsdoc::htmlify-format/</code></TD>" qualifiers (form-specialized-arglist specializers (fn-arglist sm)))
+    (format stream "~%<TD ALIGN=LEFT><B><CODE>~/cl-simpledoc::htmlify-format/ </B>" (generic-function-name (method-generic-function sm)))
+    (format stream "~{~S ~}~/cl-simpledoc::htmlify-format/</code></TD>" qualifiers (form-specialized-arglist specializers (fn-arglist sm)))
     (format stream "~%<TD ALIGN=RIGHT><I>~A</I></TD></TR>" (if (typep sm 'standard-accessor-method)
                                                         "[accessor-method]"
                                                         "[method]"
@@ -156,8 +156,8 @@
   "Makes the top line for a generic function."
   (let ((*print-case* :downcase))
     (format stream "~%<TR>")
-    (format stream "~%<TD ALIGN=LEFT><B><code><font size=+1>~/svsdoc::htmlify-format/ </font></B>" (generic-function-name gf))
-    (format stream "~/svsdoc::htmlify-format/</code></TD>" (fn-arglist gf))
+    (format stream "~%<TD ALIGN=LEFT><B><code><font size=+1>~/cl-simpledoc::htmlify-format/ </font></B>" (generic-function-name gf))
+    (format stream "~/cl-simpledoc::htmlify-format/</code></TD>" (fn-arglist gf))
     (format stream "~%<TD ALIGN=RIGHT><I>~A</I></TD></TR>" "[Generic function]")))
 
 (defmethod print-topline ((fn function) stream)
@@ -165,9 +165,9 @@
   (let ((*print-case* :downcase)
         (name (fn-name fn)))
     (format stream "~%<TR>")
-    (format stream "~%<TD ALIGN=LEFT><B><code><font size=+1>~/svsdoc::htmlify-format/ </font></B>" name)
-    (format stream "~/svsdoc::htmlify-format/</code></TD>" (fn-arglist name))
-    (format stream "~%<TD ALIGN=RIGHT><I>~/svsdoc::htmlify-format/</I></TD></TR>" (if (macro-function name)
+    (format stream "~%<TD ALIGN=LEFT><B><code><font size=+1>~/cl-simpledoc::htmlify-format/ </font></B>" name)
+    (format stream "~/cl-simpledoc::htmlify-format/</code></TD>" (fn-arglist name))
+    (format stream "~%<TD ALIGN=RIGHT><I>~/cl-simpledoc::htmlify-format/</I></TD></TR>" (if (macro-function name)
                                                              "[Macro]"
                                                              "[Function]"))))
 
@@ -176,9 +176,9 @@
   (let ((*print-case* :downcase)
         (name (class-name class)))
     (format stream "~%<TR>")
-    (format stream "~%<TD ALIGN=LEFT><B><code><font size=+1>~/svsdoc::htmlify-format/ </font></B>" name)
-    (format stream "~/svsdoc::htmlify-format/</code></TD>" (mapcar 'class-name (class-direct-superclasses class)))
-    (format stream "~%<TD ALIGN=RIGHT><I>~/svsdoc::htmlify-format/</I></TD></TR>" "[Class]")))
+    (format stream "~%<TD ALIGN=LEFT><B><code><font size=+1>~/cl-simpledoc::htmlify-format/ </font></B>" name)
+    (format stream "~/cl-simpledoc::htmlify-format/</code></TD>" (mapcar 'class-name (class-direct-superclasses class)))
+    (format stream "~%<TD ALIGN=RIGHT><I>~/cl-simpledoc::htmlify-format/</I></TD></TR>" "[Class]")))
 
 (defgeneric print-documentation-section (thing stream)
   (:documentation "Prints the documentation section for thing."))
@@ -186,7 +186,7 @@
 (defun print-docs (docs stream)
   (let ((doc (or docs "[No documentation found]")))
     (format stream "~%<TR>")
-    (when doc (format stream "~%<TD COLSPAN=2>~/svsdoc::htmlify-format/</TD>" doc))
+    (when doc (format stream "~%<TD COLSPAN=2>~/cl-simpledoc::htmlify-format/</TD>" doc))
     (format stream "~%</TR>")))
 
 (defmethod print-documentation-section ((thing t) stream)
@@ -203,7 +203,7 @@
 
 (defmethod print-documentation-section ((slot slot-definition) stream)
   (format stream "~%<TR>")
-  (format stream "~%<TD>~/svsdoc::htmlify-format/</TD><TD ALIGN=LEFT>~/svsdoc::htmlify-format/</TD>" (slot-definition-name slot) (or (documentation slot t) ""))
+  (format stream "~%<TD>~/cl-simpledoc::htmlify-format/</TD><TD ALIGN=LEFT>~/cl-simpledoc::htmlify-format/</TD>" (slot-definition-name slot) (or (documentation slot t) ""))
   (format stream "~%</TR>"))
 
 (defun form-specialized-arglist (specializers arglist)
@@ -289,7 +289,7 @@
        ; (format t "~%Generic functions: ~S" found-gfs)
        ; (format t "~%Classes: ~S" found-classes)
       (format stream "<h2>Documentation for package :~A</h2>" (package-name package))
-      (format stream "<i>This documentation was created by svsdoc</i>")
+      (format stream "<i>This documentation was created by cl-simpledoc</i>")
       (format stream "<p>")
       (when variables
         (dolist (f found-variables)
@@ -318,6 +318,6 @@
           )))))
            
 #|
-(with-open-file (s "ccl:svsdoc.html" :direction :output :if-exists :supersede)
-  (svsdoc:print-package-docs :svsdoc s :external t :internal t :variables t :functions t :macros t :classes t :generic-functions t))
+(with-open-file (s "ccl:cl-simpledoc.html" :direction :output :if-exists :supersede)
+  (cl-simpledoc:print-package-docs :cl-simpledoc s :external t :internal t :variables t :functions t :macros t :classes t :generic-functions t))
 |#

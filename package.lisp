@@ -1,5 +1,5 @@
 ;;; package.lisp
-;;; for svsdoc
+;;; for cl-simpledoc
 ;;; 07-Mar-2017 SVS
 
 ;; Copyright (c) 2017, Shannon Spires
@@ -33,7 +33,7 @@
 ;; (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 ;; OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(defpackage :svsdoc
+(defpackage :cl-simpledoc
   (:use :cl)
   (:import-from :c2mop
                 :class-direct-superclasses
