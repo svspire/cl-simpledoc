@@ -1,31 +1,43 @@
-SVSDOC is a quick-and-dirty documentation system for Common Lisp.
-Converts Common Lisp documentation strings to HTML.
-Minimal dependencies: Just closer-mop.
-Tested only in CCL.
-It's very simple: It only generates HTML output, and it sends all the
+CL-SIMPLEDOC is a quick-and-dirty documentation system for Common Lisp, which
+converts Common Lisp documentation strings to HTML.
+
+It has minimal dependencies: Just `closer-mop`.
+It's intended to be generic Common Lisp, but it's been tested only in CCL.
+
+CL-SIMPLEDOC is very simple: It only generates HTML output, and it sends all the
 documentation for a package to a single HTML page. It's much simpler
 than most of the other documentation systems for Common Lisp but that
-also makes it much easier to maintain and easier to port.
+also makes it easier to maintain and easier to port.
 
-EXAMPLE
-(with-open-file (s "ccl:svsdoc.html" :direction :output :if-exists :supersede)
-  (svsdoc:print-package-docs :svsdoc s :external t :internal t :variables t :functions t :macros t :classes t :generic-functions t))
+## Example
 
-OTHER DOCUMENTATION SYSTEMS FOR COMMON LISP
-(ql:quickload "atdoc")
+```lisp
+(with-open-file (s "ccl:cl-simpledoc.html" :direction :output :if-exists :supersede)
+  (cl-simpledoc:print-package-docs :cl-simpledoc s :external t :internal t :variables t :functions t :macros t :classes t :generic-functions t))
+  ```
+  
+## Other documentation systems for common lisp
+
+### ATDOC
 www.lichteblau.com/atdoc/doc/
+
+```lisp
+(ql:quickload "atdoc")
+```
+
 Not recommended for CCL. Appears to be designed for SBCL.
-Loads, but doesn't run, in CCL because it's
-not conditionalized for CCL, and depends on a WHOLE BUNCH
+Loads, but doesn't run, in CCL because it's not conditionalized for CCL, and depends on a WHOLE BUNCH
 of other stuff. Very hard to call. See the example of calling it in 
-gendocs.lisp, in the trivial-garbage system. cl-geonames also uses
+gendocs.lisp, in the trivial-garbage system. `cl-geonames` also uses
 it for documentation:
 https://github.com/nlamirault/cl-geonames
 
+### CL-API
+
+```lisp
 (ql::quickload "cl-api")
-Generates HTML output, simple, easy to call. Has to be modified
-to make it work in CCL. This is easy to do, but it doesn't seem
-to have a public Git or other repo so I can't do a pull request for
-my changes.
-UPDATE: It seems to be on github now.
+```
+
+Generates HTML output. Simple, easy to call. Has to be modified
+to make it work in CCL. This is easy to do, but I haven't done it.
 https://github.com/kiuma/CL-API
