@@ -39,6 +39,8 @@
 
 (in-package :cl-simpledoc)
 
+(defvar *could-not-document* nil "List of things that could not be documented by print-package-docs")
+
 (defparameter *entity-table*
   '((#\< . "&lt;")
     (#\> . "&gt;")
@@ -78,6 +80,10 @@
   (declare (ignore thing stream))
   (call-next-method)
   (values))
+
+(defmethod thing-to-html ((thing t) stream)
+  (declare (ignore stream))
+  (push thing *could-not-document*))
 
 (defmethod thing-to-html ((sym symbol) stream)
   (%thing-to-html sym stream))
@@ -242,7 +248,8 @@
 (defun print-package-docs (package stream &key (external t) (internal nil) (functions nil) (macros nil) (generic-functions nil) (classes nil) (variables nil))
   "Do a mass conversion of documentation from a package into HTML."
   (setf package (find-package package))
-  (let ((external-symbols nil)
+  (let ((*could-not-document* nil)
+        (external-symbols nil)
         (internal-symbols (when internal (loop for sym being each present-symbol of package
                                            when (eql package (symbol-package sym)) ; omit imported symbols
                                            collect sym)))
@@ -335,7 +342,9 @@
       (when internal
         (format stream "<hr>~%")
         (format stream "<h3 style=\"color:red;\">Internal Symbols</h3>~%")
-        (showdocs internal-symbols)))))
+        (showdocs internal-symbols))
+      (when *could-not-document*
+        (cons :could-not-document *could-not-document*)))))
            
 #|
 (with-open-file (s "ccl:cl-simpledoc.html" :direction :output :if-exists :supersede)
