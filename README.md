@@ -9,11 +9,14 @@ documentation for a package to a single HTML page. It's much simpler
 than most of the other documentation systems for Common Lisp but that
 also makes it easier to maintain and easier to port.
 
-Since any Common Lisp automatic documentation system should be able to document itself, we've done that with [cl-simpledoc.html](http://htmlpreview.github.com/?https://github.com/svspire/cl-simpledoc/edit/master/cl-simpledoc.html) , which is included in this repository for your convenience.
+Since any Common Lisp automatic documentation system should be able to document itself, we've done that with [cl-simpledoc.html](http://htmlpreview.github.com/?https://github.com/svspire/cl-simpledoc/blob/master/cl-simpledoc.html), which is included in this repository for your convenience.
 
 ## Example
 
+Here's how we generated [cl-simpledoc.html](http://htmlpreview.github.com/?https://github.com/svspire/cl-simpledoc/blob/master/cl-simpledoc.html), which is in this repository.
+
 ```lisp
+(ql:quickload :cl-simpledoc) ; we're not in quicklisp as yet. This assumes you cloned this repo to your local disk.
 (with-open-file (s "ccl:cl-simpledoc.html" :direction :output :if-exists :supersede)
   (cl-simpledoc:print-package-docs :cl-simpledoc s :external t :internal t :variables t :functions t :macros t :classes t :generic-functions t))
   ```
