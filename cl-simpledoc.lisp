@@ -41,6 +41,15 @@
 
 (defvar *could-not-document* nil "List of things that could not be documented by print-package-docs")
 
+(defparameter *html-header*
+  "<!DOCTYPE html>
+  <html>
+  <body style=\" margin:0; padding:0;\">")
+
+(defparameter *html-footer*
+  "</body>
+  </html>")
+
 (defparameter *entity-table*
   '((#\< . "&lt;")
     (#\> . "&gt;")
@@ -242,11 +251,10 @@
   "Make and format a specific specializer pair in the lambda list of a method."
   (format stream "(~A ~A)" (car list) (cadr list)))
 
-(defmacro document-package (&rest rest)
-  `(%document-package ,@rest :genesis-message ,(format nil "(document-package ~{~S ~})" rest)))
-
 (defun print-package-docs (package stream &key (external t) (internal nil) (functions nil) (macros nil) (generic-functions nil) (classes nil) (variables nil))
-  "Do a mass conversion of documentation from a package into HTML."
+  "Do a mass conversion of documentation from a package into HTML.
+   Does NOT add proper HTML headers and footers; this way you can document more than one package
+   into a single HTML file stream."
   (setf package (find-package package))
   (let ((*could-not-document* nil)
         (external-symbols nil)
@@ -346,7 +354,43 @@
       (when *could-not-document*
         (cons :could-not-document *could-not-document*)))))
            
+(defparameter *output-root* #P"home:")
+
+(defparameter *html-header*
+  "<!DOCTYPE html>
+  <html>
+  <body>
+  <div style=\"margin: auto; width:95%;\">")
+
+(defparameter *html-footer*
+  "</div>
+  </body>
+  </html>")
+
+(defun document-package (package &optional outpath)
+  "Documents given package in its own standalone HTML file at outpath if given,
+   otherwise it makes a pathname from the package name and merges it with *output-root*"
+  (when (find-package package)
+    (let* ((package-name (package-name package))
+           (pname (substitute #\- #\/ package-name)) ; slashes are illegal in pathnames
+           (outfile (or outpath (merge-pathnames (concatenate 'string pname ".html") *output-root*))))
+      (with-open-file (s outfile :direction :output :if-exists :supersede)
+        (write-string *html-header* s)
+        (cl-simpledoc:print-package-docs package s
+                                         :external t
+                                         :internal t
+                                         :variables t
+                                         :functions t
+                                         :macros t
+                                         :classes t
+                                         :generic-functions t)
+        (write-string *html-footer* s))
+      outfile)))
+
 #|
+
+(document-package :cl-simpledoc)
+
 (with-open-file (s "ccl:cl-simpledoc.html" :direction :output :if-exists :supersede)
   (cl-simpledoc:print-package-docs :cl-simpledoc s :external t :internal t :variables t :functions t :macros t :classes t :generic-functions t))
 |#

@@ -50,4 +50,6 @@
                 :standard-accessor-method
                 )
   (:export
-   #:print-package-docs))
+   #:print-package-docs
+   #:document-package
+   #:*output-root*))
