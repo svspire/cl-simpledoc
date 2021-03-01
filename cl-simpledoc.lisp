@@ -53,6 +53,8 @@
   <style>
    pre {
    white-space: pre-wrap;
+   padding: 0; /* So pre sections won't have too much space around them */
+   margin: 0;
    }
   </style>
   </head>
@@ -291,7 +293,7 @@ all we need to do is keep those symbols around.
   "Send docs to stream as a table cell."
   (format stream "~%<TR>")
   (if docs
-      (format stream "~%<TD COLSPAN=2><pre>~/cl-simpledoc::htmlify-format/</pre></TD>" docs)
+      (format stream "~%<TD COLSPAN=2><p style='white-space: pre-wrap;'>~/cl-simpledoc::htmlify-format/</p></TD>" docs)
       (format stream "~%<TD COLSPAN=2><i>[No documentation found]</i></TD>"))
   (format stream "~%</TR>"))
 
@@ -307,10 +309,11 @@ all we need to do is keep those symbols around.
   "Makes documentation section for a function or macro."
   (print-docs (documentation (fd-name fd) 'function) stream))
 
+; TODO make slots look nicer. Show initforms, initargs, reader/writer/accessor.
 (defmethod print-documentation-section ((slot slot-definition) stream)
   "Makes documentation section for a slot-definition."
   (format stream "~%<TR>")
-  (format stream "~%<TD>~/cl-simpledoc::htmlify-format/</TD><TD ALIGN=LEFT>~/cl-simpledoc::htmlify-format/</TD>" (slot-definition-name slot) (or (documentation slot t) ""))
+  (format stream "~%<TD><pre>~/cl-simpledoc::htmlify-format/</pre></TD><TD ALIGN=LEFT>~/cl-simpledoc::htmlify-format/</TD>" (slot-definition-name slot) (or (documentation slot t) ""))
   (format stream "~%</TR>"))
 
 (defun form-specialized-arglist (specializers arglist)
