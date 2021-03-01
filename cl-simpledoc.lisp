@@ -281,10 +281,11 @@ all we need to do is keep those symbols around.
 
 (defun print-docs (docs stream)
   "Send docs to stream as a table cell."
-  (let ((doc (or docs "[No documentation found]")))
-    (format stream "~%<TR>")
-    (when doc (format stream "~%<TD COLSPAN=2>~/cl-simpledoc::htmlify-format/</TD>" doc))
-    (format stream "~%</TR>")))
+  (format stream "~%<TR>")
+  (if docs
+      (format stream "~%<TD COLSPAN=2><pre>~/cl-simpledoc::htmlify-format/</pre></TD>" docs)
+      (format stream "~%<TD COLSPAN=2><i>[No documentation found]</i></TD>"))
+  (format stream "~%</TR>"))
 
 (defmethod print-documentation-section ((thing t) stream)
   "Makes default documentation section."
@@ -304,7 +305,6 @@ all we need to do is keep those symbols around.
   (format stream "~%<TD>~/cl-simpledoc::htmlify-format/</TD><TD ALIGN=LEFT>~/cl-simpledoc::htmlify-format/</TD>" (slot-definition-name slot) (or (documentation slot t) ""))
   (format stream "~%</TR>"))
 
-; TODO: Fix this so it prints method lambda lists sanely
 (defun form-specialized-arglist (specializers arglist)
   "Make and format the specialized lambda list for a method."
   (let ((*print-case* :downcase)
