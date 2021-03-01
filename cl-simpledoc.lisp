@@ -135,21 +135,24 @@ all we need to do is keep those symbols around.
               (write-char char stream))))))
 
 (defun htmlify-format (stream format-arg colon? at? &rest rest)
-  (declare (ignore colon? at? rest))
-  (htmlify (format nil "~:A" format-arg) stream))
+  (declare (ignore at? rest))
+  (if colon? ; if colon is present, print colons literally. Ha. 
+      (htmlify (format nil "~S" format-arg) stream)
+      (htmlify (format nil "~:A" format-arg) stream)))
 
 (defun classname-with-link (classname)
   (declare (special *classes-herein*))
-  (let* ((*print-case* :downcase)
-         (printed-classname (format nil "~A" classname)))
+  (let ((*print-case* :downcase))
     (if (member classname *classes-herein*)
-        (with-output-to-string (s)
-          (write-string "<a href=\"#" s)
-          (htmlify printed-classname s)
-          (write-string "\">" s)
-          (htmlify printed-classname s)
-          (write-string "</a>" s))
-        (with-output-to-string (s) (htmlify printed-classname s)))))
+        (let ((printed-classname (format nil "~A" classname)))
+          (with-output-to-string (s)
+            (write-string "<a href=\"#" s)
+            (htmlify printed-classname s)
+            (write-string "\">" s)
+            (htmlify printed-classname s)
+            (write-string "</a>" s)))
+        ; If classname is not in *classes-herein*, print it with its package designator
+        (with-output-to-string (s) (htmlify (format nil "~S" classname) s)))))
 
 (defgeneric thing-to-html (thing stream)
   (:documentation "Print thing to stream as HTML."))
@@ -231,7 +234,7 @@ all we need to do is keep those symbols around.
         (specializers (method-specializers sm)))
     (format stream "~%<TR>")
     (format stream "~%<TD ALIGN=LEFT><B><CODE>~/cl-simpledoc::htmlify-format/ " (generic-function-name (method-generic-function sm)))
-    (format stream "~{~S ~}~/cl-simpledoc::htmlify-format/</code></B></TD>" qualifiers (form-specialized-arglist specializers (fn-arglist sm)))
+    (format stream "~{~S ~}~:A</code></B></TD>" qualifiers (form-specialized-arglist specializers (fn-arglist sm)))
     (format stream "~%<TD ALIGN=RIGHT><I>~A</I></TD></TR>" (if (typep sm 'standard-accessor-method)
                                                         "[accessor-method]"
                                                         "[method]"
@@ -297,6 +300,7 @@ all we need to do is keep those symbols around.
   (format stream "~%<TD>~/cl-simpledoc::htmlify-format/</TD><TD ALIGN=LEFT>~/cl-simpledoc::htmlify-format/</TD>" (slot-definition-name slot) (or (documentation slot t) ""))
   (format stream "~%</TR>"))
 
+; TODO: Fix this so it prints method lambda lists sanely
 (defun form-specialized-arglist (specializers arglist)
   "Make and format the specialized lambda list for a method."
   (let ((*print-case* :downcase)
@@ -318,18 +322,19 @@ all we need to do is keep those symbols around.
         (setf separator #\space)
         (if (listp item)
           (convert-specializer-pair item stream)
-          (format stream "~A" item)
-          ))
+          (format stream "~/cl-simpledoc::htmlify-format/" item)))
       (format stream ")"))))
 
 (defun convert-specializer-pair (list stream)
   "Make and format a specific specializer pair in the lambda list of a method."
-  (format stream "(~A ~A)" (car list) (cadr list)))
+  (if (listp (cadr list)) ; i.e. (:eql <foo>)
+      (format stream "(~/cl-simpledoc::htmlify-format/ ~:/cl-simpledoc::htmlify-format/)" (car list) (cadr list))
+      (format stream "(~/cl-simpledoc::htmlify-format/ ~A)" (car list) (classname-with-link (cadr list)))))
 
 (defun print-package-docs (package stream &key (external t) (internal nil) (functions nil) (macros nil) (generic-functions nil) (classes nil) (variables nil))
   "Do a mass conversion of documentation from a package into HTML.
-   Does NOT add proper HTML headers and footers; this way you can document more than one package
-   into a single HTML file stream."
+  Does NOT add proper HTML headers and footers; this way you can document more than one package
+  into a single HTML file stream."
   (setf package (find-package package))
   (let ((*could-not-document* nil)
         (external-symbols nil)
@@ -383,12 +388,11 @@ all we need to do is keep those symbols around.
                    (format stream "<BR/>~%")
                    )))
              (when classes
-               (let ((*classes-herein* found-classes))
-                 (dolist (c found-classes)
-                   (when (member c onlist)
-                     (thing-to-html (find-class c) stream)
-                     (format stream "<BR/>~%")
-                     ))))
+               (dolist (c found-classes)
+                 (when (member c onlist)
+                   (thing-to-html (find-class c) stream)
+                   (format stream "<BR/>~%")
+                   )))
              (when functions
                (dolist (f found-functions)
                  (when (member f onlist)
@@ -424,15 +428,16 @@ all we need to do is keep those symbols around.
       (format stream "<i>This documentation was created by <a href=https://github.com/svspire/cl-simpledoc>cl-simpledoc</a></i>~%")
       (format stream "<p>~%")
       
-      (when external
-        (format stream "<h3 style=\"color:green;\">External Symbols</h3>~%")
-        (showdocs external-symbols))
-      (when internal
-        (format stream "<hr>~%")
-        (format stream "<h3 style=\"color:red;\">Internal Symbols</h3>~%")
-        (showdocs internal-symbols))
-      (when *could-not-document*
-        (cons :could-not-document *could-not-document*)))))
+      (let ((*classes-herein* found-classes))
+        (when external
+          (format stream "<h3 style=\"color:green;\">External Symbols</h3>~%")
+          (showdocs external-symbols))
+        (when internal
+          (format stream "<hr>~%")
+          (format stream "<h3 style=\"color:red;\">Internal Symbols</h3>~%")
+          (showdocs internal-symbols))
+        (when *could-not-document*
+          (cons :could-not-document *could-not-document*))))))
            
 (defparameter *output-root* (user-homedir-pathname) "Default directory path where document-package will produce its output file.")
 
