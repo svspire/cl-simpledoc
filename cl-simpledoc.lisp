@@ -67,7 +67,10 @@
 
 (defun fn-arglist (fname)
   "Returns arglist for function named fname"
-  #+CCL (ccl:arglist fname t)
+  #+CCL (typecase fname
+          (symbol (ccl:arglist fname t))
+          (method (cddr (ccl:arglist fname t))) ; don't return the CCL::&METHOD and #:NEXT-METHOD-CONTEXT
+          (generic-function (ccl:arglist fname t)))
   #+SBCL (sb-introspect:function-lambda-list fname)
   #+LISPWORKS
      (typecase fname
@@ -234,6 +237,7 @@ all we need to do is keep those symbols around.
         (specializers (method-specializers sm)))
     (format stream "~%<TR>")
     (format stream "~%<TD ALIGN=LEFT><B><CODE>~/cl-simpledoc::htmlify-format/ " (generic-function-name (method-generic-function sm)))
+    ; Assume method qualifiers don't need htmlification
     (format stream "~{~S ~}~:A</code></B></TD>" qualifiers (form-specialized-arglist specializers (fn-arglist sm)))
     (format stream "~%<TD ALIGN=RIGHT><I>~A</I></TD></TR>" (if (typep sm 'standard-accessor-method)
                                                         "[accessor-method]"
