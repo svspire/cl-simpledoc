@@ -49,6 +49,13 @@
 (defparameter *html-header*
   "<!DOCTYPE html>
   <html>
+  <head>
+  <style>
+   pre {
+   white-space: pre-wrap;
+   }
+  </style>
+  </head>
   <body>
   <div style=\"margin: auto; width:95%;\">"
   "Default HTML header matter")
