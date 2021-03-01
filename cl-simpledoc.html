@@ -1,5 +1,14 @@
 <!DOCTYPE html>
   <html>
+  <head>
+  <style>
+   pre {
+   white-space: pre-wrap;
+  padding: 0;
+  margin: 0;
+   }
+  </style>
+  </head>
   <body>
   <div style="margin: auto; width:95%;"><h2>Documentation for package :CL-SIMPLEDOC</h2>
 <i>This documentation was created by <a href=https://github.com/svspire/cl-simpledoc>cl-simpledoc</a></i>
@@ -11,30 +20,30 @@
 <TD ALIGN=LEFT><B><code><font size=+1>*output-root* </font></code></B>
 <TD ALIGN=RIGHT><I>[Variable]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Default directory path where document-package will produce its output file.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Default directory path where document-package will produce its output file.</p></TD>
 </TR>
 </TABLE>
 <BR/>
 
 <TABLE CELLPADDING=3 WIDTH="100%">
 <TR>
-<TD ALIGN=LEFT><B><code><font size=+1>document-package </font></B>(package &amp;optional outpath)</code></TD>
+<TD ALIGN=LEFT><B><code><font size=+1>document-package </font>(package &amp;optional outpath)</code></B></TD>
 <TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Documents given package in its own standalone HTML file at outpath if given,
-   otherwise it makes a pathname from the package name and merges it with *output-root*</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Documents given package in its own standalone HTML file at outpath if given,
+   otherwise it makes a pathname from the package name and merges it with *output-root*</p></TD>
 </TR>
 </TABLE>
 <BR/>
 
 <TABLE CELLPADDING=3 WIDTH="100%">
 <TR>
-<TD ALIGN=LEFT><B><code><font size=+1>print-package-docs </font></B>(package stream &amp;key (external t) internal functions macros generic-functions classes variables)</code></TD>
+<TD ALIGN=LEFT><B><code><font size=+1>print-package-docs </font>(package stream &amp;key (external t) (internal nil) (functions nil) (macros nil) (generic-functions nil) (classes nil) (variables nil))</code></B></TD>
 <TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Do a mass conversion of documentation from a package into HTML.
-   Does NOT add proper HTML headers and footers; this way you can document more than one package
-   into a single HTML file stream.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Do a mass conversion of documentation from a package into HTML.
+  Does NOT add proper HTML headers and footers; this way you can document more than one package
+  into a single HTML file stream.</p></TD>
 </TR>
 </TABLE>
 <BR/>
@@ -43,10 +52,20 @@
 
 <TABLE CELLPADDING=3 WIDTH="100%">
 <TR>
+<TD ALIGN=LEFT><B><code><font size=+1>*classes-herein* </font></code></B>
+<TD ALIGN=RIGHT><I>[Variable]</I></TD></TR>
+<TR>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Special variable to hold names of classes we're documenting during one call to #'print-package-docs</p></TD>
+</TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
 <TD ALIGN=LEFT><B><code><font size=+1>*could-not-document* </font></code></B>
 <TD ALIGN=RIGHT><I>[Variable]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>List of things that could not be documented by print-package-docs</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>List of things that could not be documented by print-package-docs</p></TD>
 </TR>
 </TABLE>
 <BR/>
@@ -56,7 +75,7 @@
 <TD ALIGN=LEFT><B><code><font size=+1>*entity-table* </font></code></B>
 <TD ALIGN=RIGHT><I>[Variable]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>[No documentation found]</TD>
+<TD COLSPAN=2><i>[No documentation found]</i></TD>
 </TR>
 </TABLE>
 <BR/>
@@ -66,7 +85,7 @@
 <TD ALIGN=LEFT><B><code><font size=+1>*html-footer* </font></code></B>
 <TD ALIGN=RIGHT><I>[Variable]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Default HTML footer matter for document-package</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Default HTML footer matter for document-package</p></TD>
 </TR>
 </TABLE>
 <BR/>
@@ -76,111 +95,121 @@
 <TD ALIGN=LEFT><B><code><font size=+1>*html-header* </font></code></B>
 <TD ALIGN=RIGHT><I>[Variable]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Default HTML header matter</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Default HTML header matter</p></TD>
 </TR>
 </TABLE>
 <BR/>
 
 <TABLE CELLPADDING=3 WIDTH="100%">
 <TR>
-<TD ALIGN=LEFT><B><code><font size=+1>function-designator </font></B>(standard-object)</code></TD>
+<TD ALIGN=LEFT ID="function-designator"><B><code><font size=+1>function-designator </font>(standard-object)</code></B></TD>
 <TD ALIGN=RIGHT><I>[Class]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>A designator for a function object that keeps its name handy.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>A designator for a function object that keeps its name handy.</p></TD>
 </TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
 <TABLE CELLPADDING=3 WIDTH=95%>
 <TR>
-<TD>fd-name</TD><TD ALIGN=LEFT>The symbol that names this function</TD>
+<TD><pre>fd-name</pre></TD><TD ALIGN=LEFT>The symbol that names this function</TD>
 </TR>
 <TR>
-<TD>contents</TD><TD ALIGN=LEFT>The result of calling (symbol-function fd-name) or (macro-function fd-name)</TD>
+<TD><pre>contents</pre></TD><TD ALIGN=LEFT>The result of calling (symbol-function fd-name) or (macro-function fd-name)</TD>
 </TR></TABLE></TD></TR>
 </TABLE>
 <BR/>
 
 <TABLE CELLPADDING=3 WIDTH="100%">
 <TR>
-<TD ALIGN=LEFT><B><code><font size=+1>%thing-to-html </font></B>(thing stream &amp;optional (width 100%))</code></TD>
+<TD ALIGN=LEFT><B><code><font size=+1>%thing-to-html </font>(thing stream &amp;optional (width 100%))</code></B></TD>
 <TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Shows the description of a function or macro or variable or class.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Shows the description of a function or macro or variable or class.</p></TD>
 </TR>
 </TABLE>
 <BR/>
 
 <TABLE CELLPADDING=3 WIDTH="100%">
 <TR>
-<TD ALIGN=LEFT><B><code><font size=+1>convert-specializer-pair </font></B>(list stream)</code></TD>
+<TD ALIGN=LEFT><B><code><font size=+1>classname-with-link </font>(classname)</code></B></TD>
 <TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Make and format a specific specializer pair in the lambda list of a method.</TD>
+<TD COLSPAN=2><i>[No documentation found]</i></TD>
 </TR>
 </TABLE>
 <BR/>
 
 <TABLE CELLPADDING=3 WIDTH="100%">
 <TR>
-<TD ALIGN=LEFT><B><code><font size=+1>fn-arglist </font></B>(fname)</code></TD>
+<TD ALIGN=LEFT><B><code><font size=+1>convert-specializer-pair </font>(list stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Returns arglist for function named fname</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Make and format a specific specializer pair in the lambda list of a method.</p></TD>
 </TR>
 </TABLE>
 <BR/>
 
 <TABLE CELLPADDING=3 WIDTH="100%">
 <TR>
-<TD ALIGN=LEFT><B><code><font size=+1>form-specialized-arglist </font></B>(specializers arglist)</code></TD>
+<TD ALIGN=LEFT><B><code><font size=+1>fn-arglist </font>(fname)</code></B></TD>
 <TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Make and format the specialized lambda list for a method.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Returns arglist for function named fname</p></TD>
 </TR>
 </TABLE>
 <BR/>
 
 <TABLE CELLPADDING=3 WIDTH="100%">
 <TR>
-<TD ALIGN=LEFT><B><code><font size=+1>htmlify </font></B>(string stream)</code></TD>
+<TD ALIGN=LEFT><B><code><font size=+1>form-specialized-arglist </font>(specializers arglist)</code></B></TD>
 <TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Replace forbidden characters in string with HTML entities.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Make and format the specialized lambda list for a method.</p></TD>
 </TR>
 </TABLE>
 <BR/>
 
 <TABLE CELLPADDING=3 WIDTH="100%">
 <TR>
-<TD ALIGN=LEFT><B><code><font size=+1>htmlify-format </font></B>(stream format-arg colon? at? &amp;rest rest)</code></TD>
+<TD ALIGN=LEFT><B><code><font size=+1>htmlify </font>(string stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>[No documentation found]</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Replace forbidden characters in string with HTML entities.</p></TD>
 </TR>
 </TABLE>
 <BR/>
 
 <TABLE CELLPADDING=3 WIDTH="100%">
 <TR>
-<TD ALIGN=LEFT><B><code><font size=+1>print-docs </font></B>(docs stream)</code></TD>
+<TD ALIGN=LEFT><B><code><font size=+1>htmlify-format </font>(stream format-arg colon? at? &amp;rest rest)</code></B></TD>
 <TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Send docs to stream as a table cell.</TD>
+<TD COLSPAN=2><i>[No documentation found]</i></TD>
 </TR>
 </TABLE>
 <BR/>
 
 <TABLE CELLPADDING=3 WIDTH="100%">
 <TR>
-<TD ALIGN=LEFT><B><code><font size=+1>contents </font></B>(function-designator)</code></TD>
+<TD ALIGN=LEFT><B><code><font size=+1>print-docs </font>(docs stream)</code></B></TD>
+<TD ALIGN=RIGHT><I>[Function]</I></TD></TR>
+<TR>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Send docs to stream as a table cell.</p></TD>
+</TR>
+</TABLE>
+<BR/>
+
+<TABLE CELLPADDING=3 WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT><B><code><font size=+1>contents </font>(function-designator)</code></B></TD>
 <TD ALIGN=RIGHT><I>[Generic function]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>[No documentation found]</TD>
+<TD COLSPAN=2><i>[No documentation found]</i></TD>
 </TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
 <TABLE CELLPADDING=3 WIDTH="95%">
 <TR>
-<TD ALIGN=LEFT><B><CODE>contents </B>((function-designator function-designator))</code></TD>
+<TD ALIGN=LEFT><B><CODE>contents ((arg-0 <a href="#function-designator">function-designator</a>))</code></B></TD>
 <TD ALIGN=RIGHT><I>[accessor-method]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>[No documentation found]</TD>
+<TD COLSPAN=2><i>[No documentation found]</i></TD>
 </TR>
 </TABLE>
 </TD></TR>
@@ -189,17 +218,17 @@
 
 <TABLE CELLPADDING=3 WIDTH="100%">
 <TR>
-<TD ALIGN=LEFT><B><code><font size=+1>fd-name </font></B>(function-designator)</code></TD>
+<TD ALIGN=LEFT><B><code><font size=+1>fd-name </font>(function-designator)</code></B></TD>
 <TD ALIGN=RIGHT><I>[Generic function]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>[No documentation found]</TD>
+<TD COLSPAN=2><i>[No documentation found]</i></TD>
 </TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
 <TABLE CELLPADDING=3 WIDTH="95%">
 <TR>
-<TD ALIGN=LEFT><B><CODE>fd-name </B>((function-designator function-designator))</code></TD>
+<TD ALIGN=LEFT><B><CODE>fd-name ((arg-0 <a href="#function-designator">function-designator</a>))</code></B></TD>
 <TD ALIGN=RIGHT><I>[accessor-method]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>[No documentation found]</TD>
+<TD COLSPAN=2><i>[No documentation found]</i></TD>
 </TR>
 </TABLE>
 </TD></TR>
@@ -208,44 +237,44 @@
 
 <TABLE CELLPADDING=3 WIDTH="100%">
 <TR>
-<TD ALIGN=LEFT><B><code><font size=+1>print-documentation-section </font></B>(thing stream)</code></TD>
+<TD ALIGN=LEFT><B><code><font size=+1>print-documentation-section </font>(thing stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[Generic function]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Prints the documentation section for thing.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Prints the documentation section for thing.</p></TD>
 </TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
 <TABLE CELLPADDING=3 WIDTH="95%">
 <TR>
-<TD ALIGN=LEFT><B><CODE>print-documentation-section </B>((thing slot-definition) stream)</code></TD>
+<TD ALIGN=LEFT><B><CODE>print-documentation-section ((slot slot-definition) stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[method]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Makes documentation section for a slot-definition.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Makes documentation section for a slot-definition.</p></TD>
 </TR>
 </TABLE>
 
 <TABLE CELLPADDING=3 WIDTH="95%">
 <TR>
-<TD ALIGN=LEFT><B><CODE>print-documentation-section </B>((thing function-designator) stream)</code></TD>
+<TD ALIGN=LEFT><B><CODE>print-documentation-section ((fd <a href="#function-designator">function-designator</a>) stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[method]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Makes documentation section for a function or macro.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Makes documentation section for a function or macro.</p></TD>
 </TR>
 </TABLE>
 
 <TABLE CELLPADDING=3 WIDTH="95%">
 <TR>
-<TD ALIGN=LEFT><B><CODE>print-documentation-section </B>((thing symbol) stream)</code></TD>
+<TD ALIGN=LEFT><B><CODE>print-documentation-section ((sym symbol) stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[method]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Makes documentation section for a variable.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Makes documentation section for a variable.</p></TD>
 </TR>
 </TABLE>
 
 <TABLE CELLPADDING=3 WIDTH="95%">
 <TR>
-<TD ALIGN=LEFT><B><CODE>print-documentation-section </B>(thing stream)</code></TD>
+<TD ALIGN=LEFT><B><CODE>print-documentation-section (thing stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[method]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Makes default documentation section.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Makes default documentation section.</p></TD>
 </TR>
 </TABLE>
 </TD></TR>
@@ -254,53 +283,53 @@
 
 <TABLE CELLPADDING=3 WIDTH="100%">
 <TR>
-<TD ALIGN=LEFT><B><code><font size=+1>print-topline </font></B>(thing stream)</code></TD>
+<TD ALIGN=LEFT><B><code><font size=+1>print-topline </font>(thing stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[Generic function]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Makes the top line of the description of thing in HTML format.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Makes the top line of the description of thing in HTML format.</p></TD>
 </TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
 <TABLE CELLPADDING=3 WIDTH="95%">
 <TR>
-<TD ALIGN=LEFT><B><CODE>print-topline </B>((thing standard-class) stream)</code></TD>
+<TD ALIGN=LEFT><B><CODE>print-topline ((class standard-class) stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[method]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Makes the top line for a class.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Makes the top line for a class.</p></TD>
 </TR>
 </TABLE>
 
 <TABLE CELLPADDING=3 WIDTH="95%">
 <TR>
-<TD ALIGN=LEFT><B><CODE>print-topline </B>((thing function-designator) stream)</code></TD>
+<TD ALIGN=LEFT><B><CODE>print-topline ((fd <a href="#function-designator">function-designator</a>) stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[method]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Makes the top line for a function or macro.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Makes the top line for a function or macro.</p></TD>
 </TR>
 </TABLE>
 
 <TABLE CELLPADDING=3 WIDTH="95%">
 <TR>
-<TD ALIGN=LEFT><B><CODE>print-topline </B>((thing generic-function) stream)</code></TD>
+<TD ALIGN=LEFT><B><CODE>print-topline ((gf generic-function) stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[method]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Makes the top line for a generic function.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Makes the top line for a generic function.</p></TD>
 </TR>
 </TABLE>
 
 <TABLE CELLPADDING=3 WIDTH="95%">
 <TR>
-<TD ALIGN=LEFT><B><CODE>print-topline </B>((thing standard-method) stream)</code></TD>
+<TD ALIGN=LEFT><B><CODE>print-topline ((sm standard-method) stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[method]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Makes the top line for a method.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Makes the top line for a method.</p></TD>
 </TR>
 </TABLE>
 
 <TABLE CELLPADDING=3 WIDTH="95%">
 <TR>
-<TD ALIGN=LEFT><B><CODE>print-topline </B>((thing symbol) stream)</code></TD>
+<TD ALIGN=LEFT><B><CODE>print-topline ((sym symbol) stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[method]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Makes the top line for a variable.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Makes the top line for a variable.</p></TD>
 </TR>
 </TABLE>
 </TD></TR>
@@ -309,71 +338,71 @@
 
 <TABLE CELLPADDING=3 WIDTH="100%">
 <TR>
-<TD ALIGN=LEFT><B><code><font size=+1>thing-to-html </font></B>(thing stream)</code></TD>
+<TD ALIGN=LEFT><B><code><font size=+1>thing-to-html </font>(thing stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[Generic function]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Print thing to stream as HTML.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Print thing to stream as HTML.</p></TD>
 </TR><TR><TD COLSPAN=2 ALIGN=RIGHT>
 <TABLE CELLPADDING=3 WIDTH="95%">
 <TR>
-<TD ALIGN=LEFT><B><CODE>thing-to-html </B>((thing standard-class) stream)</code></TD>
+<TD ALIGN=LEFT><B><CODE>thing-to-html ((class standard-class) stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[method]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Shows the description of a class.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Shows the description of a class.</p></TD>
 </TR>
 </TABLE>
 
 <TABLE CELLPADDING=3 WIDTH="95%">
 <TR>
-<TD ALIGN=LEFT><B><CODE>thing-to-html </B>((thing function-designator) stream)</code></TD>
+<TD ALIGN=LEFT><B><CODE>thing-to-html ((fd <a href="#function-designator">function-designator</a>) stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[method]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Shows the description of a function or macro.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Shows the description of a function or macro.</p></TD>
 </TR>
 </TABLE>
 
 <TABLE CELLPADDING=3 WIDTH="95%">
 <TR>
-<TD ALIGN=LEFT><B><CODE>thing-to-html </B>((thing standard-method) stream)</code></TD>
+<TD ALIGN=LEFT><B><CODE>thing-to-html ((sm standard-method) stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[method]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Shows the description of a method.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Shows the description of a method.</p></TD>
 </TR>
 </TABLE>
 
 <TABLE CELLPADDING=3 WIDTH="95%">
 <TR>
-<TD ALIGN=LEFT><B><CODE>thing-to-html </B>((thing generic-function) stream)</code></TD>
+<TD ALIGN=LEFT><B><CODE>thing-to-html ((gf generic-function) stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[method]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Shows the description of a generic function.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Shows the description of a generic function.</p></TD>
 </TR>
 </TABLE>
 
 <TABLE CELLPADDING=3 WIDTH="95%">
 <TR>
-<TD ALIGN=LEFT><B><CODE>thing-to-html </B>((thing symbol) stream)</code></TD>
+<TD ALIGN=LEFT><B><CODE>thing-to-html ((sym symbol) stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[method]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>[No documentation found]</TD>
+<TD COLSPAN=2><i>[No documentation found]</i></TD>
 </TR>
 </TABLE>
 
 <TABLE CELLPADDING=3 WIDTH="95%">
 <TR>
-<TD ALIGN=LEFT><B><CODE>thing-to-html </B>(thing stream)</code></TD>
+<TD ALIGN=LEFT><B><CODE>thing-to-html (thing stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[method]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>[No documentation found]</TD>
+<TD COLSPAN=2><i>[No documentation found]</i></TD>
 </TR>
 </TABLE>
 
 <TABLE CELLPADDING=3 WIDTH="95%">
 <TR>
-<TD ALIGN=LEFT><B><CODE>thing-to-html </B>:around (thing stream)</code></TD>
+<TD ALIGN=LEFT><B><CODE>thing-to-html :around (thing stream)</code></B></TD>
 <TD ALIGN=RIGHT><I>[method]</I></TD></TR>
 <TR>
-<TD COLSPAN=2>Ensure that thing-to-html does not return anything.</TD>
+<TD COLSPAN=2><p style='white-space: pre-wrap;'>Ensure that thing-to-html does not return anything.</p></TD>
 </TR>
 </TABLE>
 </TD></TR>
