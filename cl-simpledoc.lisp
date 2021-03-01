@@ -35,7 +35,10 @@
 ;;; Extracts Common Lisp documentation strings from symbols in a package and generates html output
 ;;;   similar to CLtL2 format.
 
-;;; Note: I've attempted to make this portable, but it's only been tested in CCL.
+;;; Note: I've attempted to make this portable, but it's only been tested in CCL and Lispworks.
+
+;;; Limitations: Doesn't attempt to deduce what symbols in package have a (setf <symbol>)
+;;;  function defined.
 
 (in-package :cl-simpledoc)
 
@@ -44,11 +47,15 @@
 (defparameter *html-header*
   "<!DOCTYPE html>
   <html>
-  <body style=\" margin:0; padding:0;\">")
+  <body>
+  <div style=\"margin: auto; width:95%;\">"
+  "Default HTML header matter")
 
 (defparameter *html-footer*
-  "</body>
-  </html>")
+  "</div>
+  </body>
+  </html>"
+  "Default HTML footer matter for document-package")
 
 (defparameter *entity-table*
   '((#\< . "&lt;")
@@ -59,12 +66,60 @@
 (defun fn-arglist (fname)
   "Returns arglist for function named fname"
   #+CCL (ccl:arglist fname t)
-  #+SBCL (sb-introspect:function-lambda-list fname))
+  #+SBCL (sb-introspect:function-lambda-list fname)
+  #+LISPWORKS
+     (typecase fname
+       (symbol (lispworks::function-lambda-list fname))
+       (method (lispworks::function-lambda-list (method-generic-function fname)))
+       (generic-function (lispworks::function-lambda-list fname))))
 
+#| Discussion about the impossibility of writing #'fn-name transportably.
+Notice that ANSI defines no function that is the inverse of #'symbol-function.
+That is, given the result Y, where Y=(symbol-function X), there's no portable
+function one can apply to Y to produce the symbol X again.
+
+It may be that there are some good reasons for that. In general, it's a very
+hard problem for a compiler writer, given a function-like object, to determine
+what symbol(s) might be bound to that object in their function cell. Some compilers
+like CCL seem to incorporate said information in the function object itself (or at
+least they have _some_ mechanism for doing it in general, since the function #'ccl::function-name
+seems to work on all function-like objects). But others like Lispworks can't do it
+very well at all. Lispworks can do it for ordinary functions using #'system::function-name,
+but that produces bogus results for generic functions, methods, and accessor functions created
+automatically by #'defstruct. (There are probably more exceptions but those are the ones I had
+found when I finally quit looking.)
+
+[Above doesn't apply to generic-functions and methods; the MOP defines #'generic-function-name and
+#'method-generic-function and closer-mop ensures those work for all major implementations.]
+
+Another reason why this might be hard is that (setf <fn>) forms complicate things.
+Figuring out when a function <fn> has an equivalent setf form is AFAIK very hard, and 
+many lisps don't handle (fdefinition '(setf <fn>)) properly in all cases even when
+the (setf <fn>) is required by ANSI.
+
+For the above reasons we're abandoning any attempt to make a portable #'fn-name function.
+Fortunately, we don't need it. Since the code herein starts with symbols that name things,
+all we need to do is keep those symbols around.
+|#
+
+#+IGNORE
 (defun fn-name (f)
-  (check-type f function)
+  "Returns name of function designator f"
   #+CCL (ccl:function-name f)
-  #+SBCL (sb-impl::%fun-name f))
+  #+SBCL (sb-impl::%fun-name f)
+  #+LISPWORKS
+  (typecase f
+    (symbol f)
+    (method (generic-function-name (method-generic-function f)))
+    (generic-function (generic-function-name f))
+    (function (system::function-name f))))
+
+(defclass function-designator ()
+  ((fd-name :initarg :fd-name :initform nil :accessor fd-name
+            :documentation "The symbol that names this function")
+   (contents :initarg :contents :initform nil :accessor contents
+                    :documentation "The result of calling (symbol-function fd-name) or (macro-function fd-name)"))
+  (:documentation "A designator for a function object that keeps its name handy."))
 
 (defun htmlify (string stream)
   "Replace forbidden characters in string with HTML entities."
@@ -114,9 +169,9 @@
   "Shows the description of a method."
   (%thing-to-html sm stream "95%"))
 
-(defmethod thing-to-html ((fn function) stream)
+(defmethod thing-to-html ((fd function-designator) stream)
   "Shows the description of a function or macro."
-  (%thing-to-html fn stream))
+  (%thing-to-html fd stream))
 
 (defmethod thing-to-html ((class standard-class) stream)
   "Shows the description of a class."
@@ -127,7 +182,7 @@
                   :key #'slot-definition-allocation)))
     (format stream "~%<TABLE CELLPADDING=3 WIDTH=\"100%\">")
     (print-topline class stream)
-    ;(print-documentation-section class stream)
+    (print-documentation-section class stream)
     (format stream "<TR><TD COLSPAN=2 ALIGN=RIGHT>")
     (format stream "~%<TABLE CELLPADDING=3 WIDTH=95%>")
     (dolist (slot class-instance-slots)
@@ -175,10 +230,10 @@
     (format stream "~/cl-simpledoc::htmlify-format/</code></TD>" (fn-arglist gf))
     (format stream "~%<TD ALIGN=RIGHT><I>~A</I></TD></TR>" "[Generic function]")))
 
-(defmethod print-topline ((fn function) stream)
+(defmethod print-topline ((fd function-designator) stream)
   "Makes the top line for a function or macro."
   (let ((*print-case* :downcase)
-        (name (fn-name fn)))
+        (name (fd-name fd)))
     (format stream "~%<TR>")
     (format stream "~%<TD ALIGN=LEFT><B><code><font size=+1>~/cl-simpledoc::htmlify-format/ </font></B>" name)
     (format stream "~/cl-simpledoc::htmlify-format/</code></TD>" (fn-arglist name))
@@ -213,11 +268,12 @@
   "Makes documentation section for a variable."
   (print-docs (documentation sym 'variable) stream))
 
-(defmethod print-documentation-section ((fn function) stream)
+(defmethod print-documentation-section ((fd function-designator) stream)
   "Makes documentation section for a function or macro."
-  (print-docs (documentation (fn-name fn) 'function) stream))
+  (print-docs (documentation (fd-name fd) 'function) stream))
 
 (defmethod print-documentation-section ((slot slot-definition) stream)
+  "Makes documentation section for a slot-definition."
   (format stream "~%<TR>")
   (format stream "~%<TD>~/cl-simpledoc::htmlify-format/</TD><TD ALIGN=LEFT>~/cl-simpledoc::htmlify-format/</TD>" (slot-definition-name slot) (or (documentation slot t) ""))
   (format stream "~%</TR>"))
@@ -302,7 +358,9 @@
              (when macros
                (dolist (f found-macros)
                  (when (member f onlist)
-                   (thing-to-html (macro-function f) stream)
+                   (thing-to-html (make-instance 'function-designator
+                                    :fd-name f
+                                    :contents (macro-function f)) stream)
                    (format stream "<BR/>~%")
                    )))
              (when classes
@@ -314,7 +372,9 @@
              (when functions
                (dolist (f found-functions)
                  (when (member f onlist)
-                   (thing-to-html (symbol-function f) stream)
+                   (thing-to-html (make-instance 'function-designator
+                                    :fd-name f
+                                    :contents (symbol-function f)) stream)
                    (format stream "<BR/>~%")
                    )))
              (when generic-functions
@@ -354,18 +414,7 @@
       (when *could-not-document*
         (cons :could-not-document *could-not-document*)))))
            
-(defparameter *output-root* #P"home:")
-
-(defparameter *html-header*
-  "<!DOCTYPE html>
-  <html>
-  <body>
-  <div style=\"margin: auto; width:95%;\">")
-
-(defparameter *html-footer*
-  "</div>
-  </body>
-  </html>")
+(defparameter *output-root* (user-homedir-pathname) "Default directory path where document-package will produce its output file.")
 
 (defun document-package (package &optional outpath)
   "Documents given package in its own standalone HTML file at outpath if given,
@@ -376,7 +425,7 @@
            (outfile (or outpath (merge-pathnames (concatenate 'string pname ".html") *output-root*))))
       (with-open-file (s outfile :direction :output :if-exists :supersede)
         (write-string *html-header* s)
-        (cl-simpledoc:print-package-docs package s
+        (print-package-docs package s
                                          :external t
                                          :internal t
                                          :variables t
