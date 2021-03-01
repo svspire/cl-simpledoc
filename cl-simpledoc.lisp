@@ -44,6 +44,8 @@
 
 (defvar *could-not-document* nil "List of things that could not be documented by print-package-docs")
 
+(defvar *classes-herein* nil "Special variable to hold names of classes we're documenting during one call to #'print-package-docs")
+
 (defparameter *html-header*
   "<!DOCTYPE html>
   <html>
@@ -136,6 +138,19 @@ all we need to do is keep those symbols around.
   (declare (ignore colon? at? rest))
   (htmlify (format nil "~:A" format-arg) stream))
 
+(defun classname-with-link (classname)
+  (declare (special *classes-herein*))
+  (let* ((*print-case* :downcase)
+         (printed-classname (format nil "~A" classname)))
+    (if (member classname *classes-herein*)
+        (with-output-to-string (s)
+          (write-string "<a href=\"#" s)
+          (htmlify printed-classname s)
+          (write-string "\">" s)
+          (htmlify printed-classname s)
+          (write-string "</a>" s))
+        (with-output-to-string (s) (htmlify printed-classname s)))))
+
 (defgeneric thing-to-html (thing stream)
   (:documentation "Print thing to stream as HTML."))
 
@@ -207,7 +222,7 @@ all we need to do is keep those symbols around.
     (format stream "~%<TD ALIGN=LEFT><B><code><font size=+1>~/cl-simpledoc::htmlify-format/ </font></code></B>" sym)
     (format stream "~%<TD ALIGN=RIGHT><I>~A</I></TD></TR>" thingname)
     (when (constantp sym)
-      (format stream "~%<TR><TD><i>Value: </i>~S</TD></TR>" (symbol-value sym)))))
+      (format stream "~%<TR><TD><i>Value: </i>~/cl-simpledoc::htmlify-format/</TD></TR>" (symbol-value sym)))))
 
 (defmethod print-topline ((sm standard-method) stream)
   "Makes the top line for a method."
@@ -215,8 +230,8 @@ all we need to do is keep those symbols around.
         (qualifiers (method-qualifiers sm))
         (specializers (method-specializers sm)))
     (format stream "~%<TR>")
-    (format stream "~%<TD ALIGN=LEFT><B><CODE>~/cl-simpledoc::htmlify-format/ </B>" (generic-function-name (method-generic-function sm)))
-    (format stream "~{~S ~}~/cl-simpledoc::htmlify-format/</code></TD>" qualifiers (form-specialized-arglist specializers (fn-arglist sm)))
+    (format stream "~%<TD ALIGN=LEFT><B><CODE>~/cl-simpledoc::htmlify-format/ " (generic-function-name (method-generic-function sm)))
+    (format stream "~{~S ~}~/cl-simpledoc::htmlify-format/</code></B></TD>" qualifiers (form-specialized-arglist specializers (fn-arglist sm)))
     (format stream "~%<TD ALIGN=RIGHT><I>~A</I></TD></TR>" (if (typep sm 'standard-accessor-method)
                                                         "[accessor-method]"
                                                         "[method]"
@@ -226,8 +241,8 @@ all we need to do is keep those symbols around.
   "Makes the top line for a generic function."
   (let ((*print-case* :downcase))
     (format stream "~%<TR>")
-    (format stream "~%<TD ALIGN=LEFT><B><code><font size=+1>~/cl-simpledoc::htmlify-format/ </font></B>" (generic-function-name gf))
-    (format stream "~/cl-simpledoc::htmlify-format/</code></TD>" (fn-arglist gf))
+    (format stream "~%<TD ALIGN=LEFT><B><code><font size=+1>~/cl-simpledoc::htmlify-format/ </font>" (generic-function-name gf))
+    (format stream "~/cl-simpledoc::htmlify-format/</code></B></TD>" (fn-arglist gf))
     (format stream "~%<TD ALIGN=RIGHT><I>~A</I></TD></TR>" "[Generic function]")))
 
 (defmethod print-topline ((fd function-designator) stream)
@@ -235,19 +250,23 @@ all we need to do is keep those symbols around.
   (let ((*print-case* :downcase)
         (name (fd-name fd)))
     (format stream "~%<TR>")
-    (format stream "~%<TD ALIGN=LEFT><B><code><font size=+1>~/cl-simpledoc::htmlify-format/ </font></B>" name)
-    (format stream "~/cl-simpledoc::htmlify-format/</code></TD>" (fn-arglist name))
+    (format stream "~%<TD ALIGN=LEFT><B><code><font size=+1>~/cl-simpledoc::htmlify-format/ </font>" name)
+    (format stream "~/cl-simpledoc::htmlify-format/</code></B></TD>" (fn-arglist name))
     (format stream "~%<TD ALIGN=RIGHT><I>~/cl-simpledoc::htmlify-format/</I></TD></TR>" (if (macro-function name)
                                                              "[Macro]"
                                                              "[Function]"))))
 
 (defmethod print-topline ((class standard-class) stream)
   "Makes the top line for a class."
-  (let ((*print-case* :downcase)
-        (name (class-name class)))
+  (let* ((*print-case* :downcase)
+         (name (class-name class))
+         (clean-name (let ((*print-case* :downcase))
+                         (with-output-to-string (s)
+                           (htmlify (format nil "~A" name) s)))))
     (format stream "~%<TR>")
-    (format stream "~%<TD ALIGN=LEFT><B><code><font size=+1>~/cl-simpledoc::htmlify-format/ </font></B>" name)
-    (format stream "~/cl-simpledoc::htmlify-format/</code></TD>" (mapcar 'class-name (class-direct-superclasses class)))
+
+    (format stream "~%<TD ALIGN=LEFT ID=\"~A\"><B><code><font size=+1>~A </font>" clean-name clean-name)
+    (format stream "~:A</code></B></TD>" (mapcar (lambda (class) (classname-with-link (class-name class))) (class-direct-superclasses class)))
     (format stream "~%<TD ALIGN=RIGHT><I>~/cl-simpledoc::htmlify-format/</I></TD></TR>" "[Class]")))
 
 (defgeneric print-documentation-section (thing stream)
@@ -364,11 +383,12 @@ all we need to do is keep those symbols around.
                    (format stream "<BR/>~%")
                    )))
              (when classes
-               (dolist (c found-classes)
-                 (when (member c onlist)
-                   (thing-to-html (find-class c) stream)
-                   (format stream "<BR/>~%")
-                   )))
+               (let ((*classes-herein* found-classes))
+                 (dolist (c found-classes)
+                   (when (member c onlist)
+                     (thing-to-html (find-class c) stream)
+                     (format stream "<BR/>~%")
+                     ))))
              (when functions
                (dolist (f found-functions)
                  (when (member f onlist)
