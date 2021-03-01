@@ -176,6 +176,7 @@ all we need to do is keep those symbols around.
   (call-next-method)
   (values))
 
+; TODO: Document structure-classes
 (defmethod thing-to-html ((thing t) stream)
   (declare (ignore stream))
   (push thing *could-not-document*))
@@ -462,19 +463,21 @@ all we need to do is keep those symbols around.
   (when (find-package package)
     (let* ((package-name (package-name package))
            (pname (substitute #\- #\/ package-name)) ; slashes are illegal in pathnames
-           (outfile (or outpath (merge-pathnames (concatenate 'string pname ".html") *output-root*))))
+           (outfile (or outpath (merge-pathnames (concatenate 'string pname ".html") *output-root*)))
+           (could-not-document nil))
       (with-open-file (s outfile :direction :output :if-exists :supersede)
         (write-string *html-header* s)
-        (print-package-docs package s
-                                         :external t
-                                         :internal t
-                                         :variables t
-                                         :functions t
-                                         :macros t
-                                         :classes t
-                                         :generic-functions t)
+        (setf could-not-document
+              (print-package-docs package s
+                                  :external t
+                                  :internal t
+                                  :variables t
+                                  :functions t
+                                  :macros t
+                                  :classes t
+                                  :generic-functions t))
         (write-string *html-footer* s))
-      outfile)))
+      (values outfile could-not-document))))
 
 #|
 
