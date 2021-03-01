@@ -69,6 +69,7 @@
   "Returns arglist for function named fname"
   #+CCL (typecase fname
           (symbol (ccl:arglist fname t))
+          (standard-accessor-method (ccl:arglist fname t))
           (method (cddr (ccl:arglist fname t))) ; don't return the CCL::&METHOD and #:NEXT-METHOD-CONTEXT
           (generic-function (ccl:arglist fname t)))
   #+SBCL (sb-introspect:function-lambda-list fname)
