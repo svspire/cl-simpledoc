@@ -279,13 +279,16 @@ all we need to do is keep those symbols around.
   (let* ((*print-case* :downcase)
          (name (class-name class))
          (clean-name (let ((*print-case* :downcase))
-                         (with-output-to-string (s)
-                           (htmlify (format nil "~A" name) s)))))
+                       (with-output-to-string (s)
+                         (htmlify (format nil "~A" name) s)))))
     (format stream "~%<TR>")
-
+    
     (format stream "~%<TD ALIGN=LEFT ID=\"~A\"><B><code><font size=+1>~A </font>" clean-name clean-name)
     (format stream "~:A</code></B></TD>" (mapcar (lambda (class) (classname-with-link (class-name class))) (class-direct-superclasses class)))
-    (format stream "~%<TD ALIGN=RIGHT><I>~/cl-simpledoc::htmlify-format/</I></TD></TR>" "[Class]")))
+    (format stream "~%<TD ALIGN=RIGHT><I>~/cl-simpledoc::htmlify-format/</I></TD></TR>"
+            (if (subtypep class 'condition)
+                "[Condition]"
+                "[Class]"))))
 
 (defgeneric print-documentation-section (thing stream)
   (:documentation "Prints the documentation section for thing."))
@@ -481,7 +484,7 @@ all we need to do is keep those symbols around.
 
 #|
 
-(document-package :cl-simpledoc)
+(cl-simpledoc:document-package :cl-simpledoc)
 
 (with-open-file (s "ccl:cl-simpledoc.html" :direction :output :if-exists :supersede)
   (cl-simpledoc:print-package-docs :cl-simpledoc s :external t :internal t :variables t :functions t :macros t :classes t :generic-functions t))
