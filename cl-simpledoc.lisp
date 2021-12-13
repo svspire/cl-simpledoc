@@ -297,7 +297,7 @@ all we need to do is keep those symbols around.
   "Send docs to stream as a table cell."
   (format stream "~%<TR>")
   (if docs
-      (format stream "~%<TD COLSPAN=2><p style='white-space: pre-wrap;'>~/cl-simpledoc::htmlify-format/</p></TD>" docs)
+      (format stream "~%<TD COLSPAN=2><div style='white-space: normal;'>~/cl-simpledoc::htmlify-format/</div></TD>" docs)
       (format stream "~%<TD COLSPAN=2><i>[No documentation found]</i></TD>"))
   (format stream "~%</TR>"))
 
