@@ -208,18 +208,37 @@ all we need to do is keep those symbols around.
 (defmethod thing-to-html ((class standard-class) stream)
   "Shows the description of a class."
   (let* ((*print-case* :downcase)
+         (all-slots (class-slots class))
          (class-instance-slots
-          (remove :instance (class-slots class)
+          (remove :instance all-slots
+                  :test (complement #'eq)
+                  :key #'slot-definition-allocation))
+         (class-class-slots
+          (remove :class all-slots
                   :test (complement #'eq)
                   :key #'slot-definition-allocation)))
     (format stream "~%<TABLE CELLPADDING=3 WIDTH=\"100%\">")
     (print-topline class stream)
     (print-documentation-section class stream)
-    (format stream "<TR><TD COLSPAN=2 ALIGN=RIGHT>")
-    (format stream "~%<TABLE CELLPADDING=3 WIDTH=95%>")
-    (dolist (slot class-instance-slots)
-      (print-documentation-section slot stream))
-    (format stream "</TABLE></TD></TR>~%</TABLE>~%")))
+    (format stream "<TR><TD><i>Instance-allocated Slots:</i></TD></TR>")
+    (cond (class-instance-slots
+           (format stream "<TR><TD COLSPAN=2 ALIGN=RIGHT>")
+           (format stream "~%<TABLE CELLPADDING=3 WIDTH=95%>")
+           (dolist (slot class-instance-slots)
+             (print-documentation-section slot stream))
+           (format stream "</TABLE></TD></TR>~%"))
+          (t (format stream "<tr><td><i>[None]</i></td></tr>")))
+
+      (format stream "<TR><TD><i>Class-allocated Slots:</i></TD></TR>")
+    (cond (class-class-slots
+           (format stream "<TR><TD COLSPAN=2 ALIGN=RIGHT>")
+           (format stream "~%<TABLE CELLPADDING=3 WIDTH=95%>")
+           (dolist (slot class-class-slots)
+             (print-documentation-section slot stream))
+           (format stream "</TABLE></TD></TR>~%"))
+          (t (format stream "<tr><td><i>[None]</i></td></tr>")))
+    
+    (format stream "~%</TABLE>~%")))
 
 (defun %thing-to-html (thing stream &optional (width "100%"))
   "Shows the description of a function or macro or variable or class."
@@ -274,6 +293,10 @@ all we need to do is keep those symbols around.
                                                              "[Macro]"
                                                              "[Function]"))))
 
+(defun pretty-class-direct-superclasses (class)
+  "Standard-object gets included if class has no explicit superclasses. Remove it."
+  (remove #.(find-class 'standard-object) (class-direct-superclasses class)))
+
 (defmethod print-topline ((class standard-class) stream)
   "Makes the top line for a class."
   (let* ((*print-case* :downcase)
@@ -284,7 +307,7 @@ all we need to do is keep those symbols around.
     (format stream "~%<TR>")
     
     (format stream "~%<TD ALIGN=LEFT ID=\"~A\"><B><code><font size=+1>~A </font>" clean-name clean-name)
-    (format stream "~:A</code></B></TD>" (mapcar (lambda (class) (classname-with-link (class-name class))) (class-direct-superclasses class)))
+    (format stream "~:A</code></B></TD>" (mapcar (lambda (class) (classname-with-link (class-name class))) (pretty-class-direct-superclasses class)))
     (format stream "~%<TD ALIGN=RIGHT><I>~/cl-simpledoc::htmlify-format/</I></TD></TR>"
             (if (subtypep class 'condition)
                 "[Condition]"
