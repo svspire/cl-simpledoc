@@ -79,7 +79,12 @@
   #+CCL (typecase fname
           (symbol (ccl:arglist fname t))
           (standard-accessor-method (ccl:arglist fname t))
-          (method (cddr (ccl:arglist fname t))) ; don't return the CCL::&METHOD and #:NEXT-METHOD-CONTEXT
+          (method (remove-if (lambda (item) ; don't return the CCL::&METHOD and #:NEXT-METHOD-CONTEXT
+                               (or (eq item 'ccl::&method) ; gotta do it explicitly because not all method arglists have these symbols, e.g. #<ccl::standard-kernel-method class-precedence-list (class)>
+                                   (and (symbolp item)
+                                        (null (symbol-package item))
+                                        (string-equal "NEXT-METHOD-CONTEXT" (symbol-name item)))))
+                             (ccl:arglist fname t)))
           (generic-function (ccl:arglist fname t)))
   #+SBCL (sb-introspect:function-lambda-list fname)
   #+LISPWORKS
