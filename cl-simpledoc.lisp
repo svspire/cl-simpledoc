@@ -79,7 +79,12 @@
   #+CCL (typecase fname
           (symbol (ccl:arglist fname t))
           (standard-accessor-method (ccl:arglist fname t))
-          (method (cddr (ccl:arglist fname t))) ; don't return the CCL::&METHOD and #:NEXT-METHOD-CONTEXT
+          (method (remove-if (lambda (item) ; don't return the CCL::&METHOD and #:NEXT-METHOD-CONTEXT
+                               (or (eq item 'ccl::&method) ; gotta do it explicitly because not all method arglists have these symbols, e.g. #<ccl::standard-kernel-method class-precedence-list (class)>
+                                   (and (symbolp item)
+                                        (null (symbol-package item))
+                                        (string-equal "NEXT-METHOD-CONTEXT" (symbol-name item)))))
+                             (ccl:arglist fname t)))
           (generic-function (ccl:arglist fname t)))
   #+SBCL (sb-introspect:function-lambda-list fname)
   #+LISPWORKS
@@ -392,6 +397,8 @@ all we need to do is keep those symbols around.
     ; Gotta get both here because class names are always external
     (do-external-symbols (sym package)
       (unless (find-symbol (symbol-name sym) :COMMON-LISP) ; because UIOP reexports these things and COMMON-LISP is adequately documented elsewhere
+        ;; do NOT get clever and filter out all symbols whose home package is not package. That makes documenting
+        ;;   overarching packages that import from subpackages impossible, e.g. the subpackages of :asdf or :uiop.
         (setq external-symbols (cons sym external-symbols))))
     
     ; remove duplicates. Internals should be strictly internals.
