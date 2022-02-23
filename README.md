@@ -13,7 +13,7 @@ Since any Common Lisp automatic documentation system should be able to document 
 
 ## Example
 
-Here's how we generated [cl-simpledoc.html](http://htmlpreview.github.com/?https://github.com/svspire/cl-simpledoc/blob/master/cl-simpledoc.html), which is in this repository.
+Here's how we generated [cl-simpledoc.html](http://htmlpreview.github.io/?https://github.com/svspire/cl-simpledoc/blob/master/cl-simpledoc.html), which is in this repository.
 
 ```lisp
 (ql:quickload :cl-simpledoc) ; we're not in quicklisp as yet. This assumes you cloned this repo to your local disk.
