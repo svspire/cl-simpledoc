@@ -397,6 +397,8 @@ all we need to do is keep those symbols around.
     ; Gotta get both here because class names are always external
     (do-external-symbols (sym package)
       (unless (find-symbol (symbol-name sym) :COMMON-LISP) ; because UIOP reexports these things and COMMON-LISP is adequately documented elsewhere
+        ;; do NOT get clever and filter out all symbols whose home package is not package. That makes documenting
+        ;;   overarching packages that import from subpackages impossible, e.g. the subpackages of :asdf or :uiop.
         (setq external-symbols (cons sym external-symbols))))
     
     ; remove duplicates. Internals should be strictly internals.
