@@ -46,3 +46,9 @@ https://github.com/nlamirault/cl-geonames
 Generates HTML output. Simple, easy to call. Has to be modified
 to make it work in CCL. This is easy to do, but I haven't done it.
 https://github.com/kiuma/CL-API
+
+### Declt
+
+https://github.com/didierverna/declt
+
+Generates Texinfo output. Seems to be conditionalized to only work in SBCL.
