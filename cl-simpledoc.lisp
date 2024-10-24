@@ -86,7 +86,9 @@
                                         (string-equal "NEXT-METHOD-CONTEXT" (symbol-name item)))))
                              (ccl:arglist fname t)))
           (generic-function (ccl:arglist fname t)))
-  #+SBCL (sb-introspect:function-lambda-list fname)
+  #+SBCL (typecase fname
+           (method (sb-introspect:function-lambda-list (method-generic-function fname)))
+           (t (sb-introspect:function-lambda-list fname)))
   #+LISPWORKS
      (typecase fname
        (symbol (lispworks::function-lambda-list fname))
